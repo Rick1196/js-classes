@@ -244,21 +244,20 @@ const countries = [
   { name: "Zimbabwe", code: "ZW" },
 ];
 
-const getCountries = (countrieCodes) => {
-  // new Promise((resolve, reject) =>{
-  // resolve(...)
-  // reject(...)
-  // });
+const getCountries = (countrieCode) => {
   return new Promise((resolve, reject) => {
-    const filteredCountries = countries.filter((country) =>
-      countrieCodes.includes(country.code)
-    );
-    if (filteredCountries.length === 0 || !countrieCodes) {
-      reject("Error, countries not found");
-    } else {
-      resolve(filteredCountries);
-    }
+    resolve(countries.find((countrie) => countrie.code === countrieCode));
   });
+  // return new Promise((resolve, reject) => {
+  //   const filteredCountries = countries.filter((country) =>
+  //     countrieCodes.includes(country.code)
+  //   );
+  //   if (filteredCountries.length === 0 || !countrieCodes) {
+  //     reject("Error, countries not found");
+  //   } else {
+  //     resolve(filteredCountries);
+  //   }
+  // });
 };
 
 exports.getCountries = getCountries;
