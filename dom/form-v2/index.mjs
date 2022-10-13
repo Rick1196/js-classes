@@ -1,0 +1,81 @@
+import Singleton from "./singleton.mjs";
+
+const single = Singleton.getInstance();
+single.setValue(10);
+const single2 = Singleton.getInstance();
+console.log(single2.value, single.value);
+const setAttributeWith = (element, method, key, value) => {
+  switch (method) {
+    case "setAttribute":
+      element.setAttribute(key, value);
+      break;
+    default:
+      element[key] = value;
+      break;
+  }
+  return element;
+};
+// const input = document.createElement("input");
+// input.type = "text";
+// {class, id, ...}
+// {class, id}
+
+const createElement = ({ elementType, ...props }) => {
+  let newElement = document.createElement(elementType);
+  for (const key of Object.keys(props)) {
+    newElement = setAttributeWith(
+      newElement,
+      props[key][1] || "setAttribute",
+      key,
+      props[key][0]
+    );
+    // newElement.class = ''
+  }
+  return newElement;
+  //
+};
+function getData(form) {
+  console.log(typeof form);
+  const values = [];
+  for (const input of Object.keys(form)) {
+    const inputElement = form[input];
+    if (inputElement.localName !== "button") {
+      values.push({
+        id: inputElement.id,
+        localName: inputElement.localName,
+        value: inputElement.value,
+        valueAsDate: inputElement.valueAsDate,
+        valueAsNumber: inputElement.valueAsNumber,
+      });
+    }
+  }
+  return values;
+}
+const handleForm = (e) => {
+  e.preventDefault();
+  const user = getData(e.target.children);
+  console.log(user, e);
+};
+const loadInitialElements = () => {
+  const root = document.getElementById("root");
+  const form = createElement({
+    elementType: "form",
+    id: ["form"],
+  });
+  const input = createElement({
+    elementType: "input",
+    placeholder: ["Name"],
+    id: ["input"],
+  });
+  const button = createElement({
+    elementType: "button",
+    type: ["submit"],
+    innerText: ["Send", "innerText"],
+  });
+  form.appendChild(input);
+  form.appendChild(button);
+  root.appendChild(form);
+  addEventListener("submit", handleForm);
+};
+
+window.addEventListener("load", loadInitialElements);
