@@ -1,5 +1,31 @@
 import Singleton from "./singleton.mjs";
 
+const exampleObject = {
+  name: "obj",
+  id: "1",
+  prop: {
+    pros: {},
+  },
+};
+
+window.sessionStorage.setItem("example", exampleObject);
+console.log(window.sessionStorage.getItem("example"));
+
+window.sessionStorage.setItem("example-string", JSON.stringify(exampleObject));
+console.log(window.sessionStorage.getItem("example-string"));
+console.log(JSON.parse(window.sessionStorage.getItem("example-string")));
+
+const string = "example-string-with-random-text";
+console.log(newString);
+const newString = string.replace(/-/g, " ");
+console.log(newString);
+const newString2 = string.replace("-", " ");
+console.log(newString2);
+
+const re = new RegExp("[0-9]+");
+const name = "ricardo 123 manuel 123";
+console.log(name.match(re));
+
 const single = Singleton.getInstance();
 single.setValue(10);
 const single2 = Singleton.getInstance();
