@@ -9,23 +9,26 @@ const buildSignUp = (root) => {
     tag: "input",
     name: ["user"],
     id: ["user"],
+    placeholder: ["User"],
   });
   const inputPass = createElement({
     tag: "input",
     name: ["pass"],
     id: ["pass"],
+    placeholder: ["password"],
   });
   const inputConfirmPass = createElement({
     tag: "input",
     name: ["Confirmpass"],
     id: ["Confirmpass"],
+    placeholder: ["Confirm password"],
   });
   const submitButton = createElement({
     tag: "button",
     name: ["submitButton"],
     id: ["submitButton"],
-    innerText: ['Enviar', 'innerText'],
-    type: ['submit'],
+    innerText: ["Enviar", "innerText"],
+    type: ["submit"],
   });
 
   form.appendChild(inputUser);
@@ -34,21 +37,59 @@ const buildSignUp = (root) => {
   form.appendChild(submitButton);
   root.appendChild(form);
 };
+// [{
+//   "id": 'asd',
+//   "value": 'string'
+// }]
+const validateForm = (formValues) => {
+  for (const value of formValues) {
+    if (
+      value.value === undefined ||
+      value.value === null ||
+      value.value === ""
+    ) {
+      console.trace();
+      console.log("error", value.id, document.getElementById(value.id));
+      document.getElementById(value.id).style.border = "solid red";
+    } else {
+      document.getElementById(value.id).style.border = "solid 1px gray";
+    }
+  }
+  if (formValues[1].value !== formValues[2].value) {
+    alert("passwords not match");
+  }
+};
 
-const handleSubmit = (e) =>{
-  e.preventDefault();
-  const values = getFormData(e.target.children);
-  console.log(e, values);
+const validateUser = (user) =>{
+  const saveduser = window.sessionStorage.getItem(user);
+  return !!saveduser;
 }
 
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const values = getFormData(e.target.children);
+  validateForm(values);
+  if(validateUser(values[0].value)){
+    alert('User exists');
+  }else{
+    window.sessionStorage.setItem(values[0].value, JSON.stringify(values));
+    alert('Welcome');
+  }
+  console.log(e, values);
+};
+
 export const main = (root) => {
+  const titleForm = createElement({
+    tag: "h3",
+    innerText: ["Sign up", "innerText"],
+  });
   const signUpContainer = createElement({
     tag: "div",
     name: ["signUpConatiner"],
     id: ["signUpConatiner"],
   });
   buildSignUp(signUpContainer);
+  root.appendChild(titleForm);
   root.appendChild(signUpContainer);
-  addEventListener('submit', handleSubmit)
+  addEventListener("submit", handleSubmit);
 };
-
