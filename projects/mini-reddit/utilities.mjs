@@ -1,4 +1,5 @@
 const notInputElements = ['button', 'label', 'div'];
+
 const setAttributeWith = (element, method, prop, value) => {
   switch (method) {
     case "setAttribute":
@@ -10,9 +11,19 @@ const setAttributeWith = (element, method, prop, value) => {
   }
   return element;
 };
-
+// {tag, ...props}
+// {tag, id, name, class, size, color, style}
 export const createElement = ({ tag, ...props }) => {
   let newElement = document.createElement(tag);
+  //for(let i = 0; i < array.length; i++)
+  //array[i]
+
+  // Object.keys({ id:.., name:..., class:..., size, color, style})
+  //['id', 'name', 'class', 'size'];
+  // it 1: key = 'id'
+  // it 2: key = 'name'
+  // it 3: key = 'class'
+
   for (const key of Object.keys(props)) {
     newElement = setAttributeWith(
       newElement,

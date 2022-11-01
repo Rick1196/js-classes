@@ -42,6 +42,7 @@ const buildSignUp = (root) => {
 //   "value": 'string'
 // }]
 const validateForm = (formValues) => {
+  let hasError = false;
   for (const value of formValues) {
     if (
       value.value === undefined ||
@@ -51,29 +52,34 @@ const validateForm = (formValues) => {
       console.trace();
       console.log("error", value.id, document.getElementById(value.id));
       document.getElementById(value.id).style.border = "solid red";
+      hasError = true;
     } else {
       document.getElementById(value.id).style.border = "solid 1px gray";
     }
   }
   if (formValues[1].value !== formValues[2].value) {
     alert("passwords not match");
+    hasError = true;
   }
+  return hasError;
 };
 
-const validateUser = (user) =>{
+const validateUser = (user) => {
   const saveduser = window.sessionStorage.getItem(user);
   return !!saveduser;
-}
+};
 
 const handleSubmit = (e) => {
   e.preventDefault();
   const values = getFormData(e.target.children);
-  validateForm(values);
-  if(validateUser(values[0].value)){
-    alert('User exists');
-  }else{
-    window.sessionStorage.setItem(values[0].value, JSON.stringify(values));
-    alert('Welcome');
+  const hasError = validateForm(values);
+  if (hasError === false) {
+    if (validateUser(values[0].value)) {
+      alert("User exists");
+    } else {
+      window.sessionStorage.setItem(values[0].value, JSON.stringify(values));
+      alert("Welcome");
+    }
   }
   console.log(e, values);
 };
