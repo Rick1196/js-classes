@@ -69,7 +69,7 @@ const validateUser = (user) => {
   return !!saveduser;
 };
 
-const handleSubmit = (e) => {
+const handleSubmit = (e, callback) => {
   e.preventDefault();
   const values = getFormData(e.target.children);
   const hasError = validateForm(values);
@@ -78,13 +78,14 @@ const handleSubmit = (e) => {
       alert("User exists");
     } else {
       window.sessionStorage.setItem(values[0].value, JSON.stringify(values));
+      callback();
       alert("Welcome");
     }
   }
   console.log(e, values);
 };
 
-export const main = (root) => {
+export const main = (root, callback) => {
   const titleForm = createElement({
     tag: "h3",
     innerText: ["Sign up", "innerText"],
@@ -97,5 +98,5 @@ export const main = (root) => {
   buildSignUp(signUpContainer);
   root.appendChild(titleForm);
   root.appendChild(signUpContainer);
-  addEventListener("submit", handleSubmit);
+  addEventListener("submit", (e) => handleSubmit(e, callback));
 };
