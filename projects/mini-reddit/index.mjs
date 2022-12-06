@@ -1,5 +1,6 @@
 import { main as session } from "./modules/session/index.mjs";
 import { main as subblogs } from "./modules/subblog/index.mjs";
+import { main as subpost } from "./modules/posts/index.mjs";
 const root = document.getElementById("root");
 
 /**
@@ -24,6 +25,8 @@ const routingCallback = (nextRoute) => {
     case "subblogs":
       subblogs(root, routingCallback);
       break;
+    case "subpost":
+      subpost(root, routingCallback);
     default:
       break;
   }

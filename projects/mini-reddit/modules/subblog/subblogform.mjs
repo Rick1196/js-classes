@@ -64,7 +64,7 @@ const validateBlog = (blogTitle) => {
   return !!blog;
 };
 
-const handleSubmit = (e) => {
+const handleSubmit = (e, observable) => {
   e.preventDefault();
   const values = getFormData(e.target.children);
   const hasError = validateForm(values);
@@ -72,14 +72,18 @@ const handleSubmit = (e) => {
     if (validateBlog(values[0].value)) {
       alert("Blog exists");
     } else {
-      window.localStorage.setItem(values[0].value, JSON.stringify(values));
+      const blogs = JSON.parse(window.localStorage.getItem("Subblog")) || [];
+      blogs.push(values);
+      window.localStorage.setItem("Subblog", JSON.stringify(blogs));
+
+      observable.notify(blogs);
       alert("Blog created");
     }
   }
   console.log(e, values);
 };
 
-export const main = (root) => {
+export const main = (root, observable) => {
   const titleForm = createElement({
     tag: "H3",
     innerText: ["Create Subblog", "InnerText"],
@@ -92,5 +96,7 @@ export const main = (root) => {
   subblogFormContainer.appendChild(titleForm);
   buildSubblogForm(subblogFormContainer);
   root.appendChild(subblogFormContainer);
-  addEventListener("submit", handleSubmit);
+  addEventListener("submit", (e) => {
+    handleSubmit(e, observable);
+  });
 };

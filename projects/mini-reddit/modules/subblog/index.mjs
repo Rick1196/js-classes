@@ -1,25 +1,36 @@
-import { main as subpostForm } from "./subblogform.mjs";
+import Observable from "../../observable.mjs";
+import { main as subblogForm } from "./subblogform.mjs";
 import { main as subblogList } from "./subbloglist.mjs";
 import { createElement } from "../../utilities.mjs";
-export const main = (root) => {
-  const subpostContainer = createElement({
+
+const observable = new Observable();
+observable.subscribe((data) => {
+  console.log(data);
+});
+
+export const main = (root, routingCallback) => {
+  const subblogContainer = createElement({
     tag: "div",
-    name: ["subpostContainer"],
-    id: ["subpostContainer"],
+    name: ["subblogContainer"],
+    id: ["subblogContainer"],
   });
-  subpostForm(subpostContainer);
+  subblogForm(subblogContainer, observable);
   const values = [];
   for (const key of Object.keys(window.localStorage)) {
     const blog = JSON.parse(window.localStorage.getItem(key));
     values.push({
       id: values.length,
       name: blog[0].value,
-      description: blog[1].value,
+      description: blog[0].value,
     });
   }
-  subblogList(subpostContainer, values);
+
+  subblogList(subblogContainer, values, () => {
+    document.getElementById("subblogContainer").remove();
+    routingCallback("subpost");
+  });
   // const saveduser = window.localStorage.getItem(user);
 
   console.log(window.localStorage);
-  root.appendChild(subpostContainer);
+  root.appendChild(subblogContainer);
 };

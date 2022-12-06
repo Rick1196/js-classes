@@ -1,7 +1,7 @@
 import { createElement } from "../../utilities.mjs";
 
 /**
- * 
+ *
  * @param {Array<{
  * id,
  * name,
@@ -10,41 +10,47 @@ import { createElement } from "../../utilities.mjs";
  * []posts
  * creator
  * }>} subblogs
- * @returns 
+ * @returns
  */
-const renderSubblogs = (subblogs, root) => {
-    for(const subblog of subblogs){
-        const sublogContainer = createElement({
-            tag: 'div',
-            name: [`sublogContainer_${subblog.id}`],
-            id: [`sublogContainer_${subblog.id}`]
-        });
-        const subblogTitle = createElement({
-            tag: 'h3',
-            innerText: [subblog.name,'innerText']
-        });
-        const description = createElement({
-            tag: 'p',
-            innerText: [subblog.description, 'innerText']
-        });
-
-        sublogContainer.appendChild(subblogTitle);
-        sublogContainer.appendChild(description);
-        root.appendChild(sublogContainer);
-    }
-}
-
-export const main = (root, subposts) => {
-    const mainContainer = createElement({
-        tag: 'div',
-        name: ['subblogsContainer'],
-        id: ['subblogsContainer'],
+const renderSubblogs = (subblogs, root, routingCallback) => {
+  for (const subblog of subblogs) {
+    const sublogContainer = createElement({
+      tag: "div",
+      name: [`sublogContainer_${subblog.id}`],
+      id: [`sublogContainer_${subblog.id}`],
+      onclick: [
+        () => {
+          routingCallback();
+        },
+        "onclick",
+      ],
     });
-    const title = createElement({
-        tag: 'h3',
-        innerText: ['Subblogs', 'innerText']
+    const subblogTitle = createElement({
+      tag: "h3",
+      innerText: [subblog.name, "innerText"],
     });
-    mainContainer.appendChild(title);
-    renderSubblogs(subposts, mainContainer);
-    root.appendChild(mainContainer);
-}
+    const description = createElement({
+      tag: "p",
+      innerText: [subblog.description, "innerText"],
+    });
+
+    sublogContainer.appendChild(subblogTitle);
+    sublogContainer.appendChild(description);
+    root.appendChild(sublogContainer);
+  }
+};
+
+export const main = (root, subposts, routingCallback) => {
+  const mainContainer = createElement({
+    tag: "div",
+    name: ["subblogsContainer"],
+    id: ["subblogsContainer"],
+  });
+  const title = createElement({
+    tag: "h3",
+    innerText: ["Subblogs", "innerText"],
+  });
+  mainContainer.appendChild(title);
+  renderSubblogs(subposts, mainContainer, routingCallback);
+  root.appendChild(mainContainer);
+};
