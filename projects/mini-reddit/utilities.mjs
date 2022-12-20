@@ -1,4 +1,4 @@
-const notInputElements = ['button', 'label', 'div'];
+const notInputElements = ["button", "label", "div"];
 
 const setAttributeWith = (element, method, prop, value) => {
   switch (method) {
@@ -35,15 +35,24 @@ export const createElement = ({ tag, ...props }) => {
   return newElement;
 };
 
-export const getFormData = (formChildren) =>{
-    const values = [];
-    for(const child of formChildren){
-        if(!notInputElements.includes(child.localName)){
-            values.push({id: child.id,
-            value: child.value,
-            })
-        }
+export const getFormData = (formChildren) => {
+  const values = [];
+  for (const child of formChildren) {
+    if (!notInputElements.includes(child.localName)) {
+      values.push({ id: child.id, value: child.value });
     }
-    return values;
+  }
+  return values;
+};
 
-}
+export const formatBlogs = (blogs) => {
+  const values = [];
+  for (const blog of blogs) {
+    values.push({
+      id: values.length,
+      name: blog[0].value,
+      description: blog[1].value,
+    });
+  }
+  return values;
+};

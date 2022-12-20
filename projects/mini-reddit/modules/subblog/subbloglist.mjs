@@ -1,4 +1,4 @@
-import { createElement } from "../../utilities.mjs";
+import { createElement, formatBlogs } from "../../utilities.mjs";
 
 /**
  *
@@ -20,6 +20,13 @@ const renderSubblogs = (subblogs, root, routingCallback) => {
       id: [`sublogContainer_${subblog.id}`],
       onclick: [
         () => {
+          const params = new URLSearchParams(`?postId=${subblog.id}`);
+          // reemplazamos el historial del navegador con esta nueva querystring
+          window.history.replaceState(
+            {},
+            "",
+            `${window.location.pathname}?${params}`
+          );
           routingCallback();
         },
         "onclick",
@@ -40,7 +47,7 @@ const renderSubblogs = (subblogs, root, routingCallback) => {
   }
 };
 
-export const main = (root, subposts, routingCallback) => {
+export const main = (root, subposts, routingCallback, observable) => {
   const mainContainer = createElement({
     tag: "div",
     name: ["subblogsContainer"],
@@ -51,6 +58,21 @@ export const main = (root, subposts, routingCallback) => {
     innerText: ["Subblogs", "innerText"],
   });
   mainContainer.appendChild(title);
+
   renderSubblogs(subposts, mainContainer, routingCallback);
   root.appendChild(mainContainer);
+  observable.subscribe((data) => {
+    document.getElementById("subblogsContainer").remove();
+    const mainContainer = createElement({
+      tag: "div",
+      name: ["subblogsContainer"],
+      id: ["subblogsContainer"],
+    });
+    const title = createElement({
+      tag: "h3",
+      innerText: ["Subblogs", "innerText"],
+    });
+    renderSubblogs(formatBlogs(data), mainContainer, routingCallback);
+    root.appendChild(mainContainer);
+  });
 };

@@ -60,8 +60,13 @@ const validateForm = (blogData) => {
 };
 
 const validateBlog = (blogTitle) => {
-  const blog = window.localStorage.getItem(blogTitle);
-  return !!blog;
+  const blogs = JSON.parse(window.localStorage.getItem("Subblog")) || [];
+  for (const blog of blogs) {
+    if (blog[0].value === blogTitle) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const handleSubmit = (e, observable) => {
@@ -69,7 +74,7 @@ const handleSubmit = (e, observable) => {
   const values = getFormData(e.target.children);
   const hasError = validateForm(values);
   if (hasError === false) {
-    if (validateBlog(values[0].value)) {
+    if (!validateBlog(values[0].value)) {
       alert("Blog exists");
     } else {
       const blogs = JSON.parse(window.localStorage.getItem("Subblog")) || [];
